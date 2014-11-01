@@ -112,7 +112,8 @@ public class Job {
 		 * Don't accept duty if we had a house job last week or in the valid history
 		 * (based to cycle at greatest distance between jobs).
 		 */
-		if (student.getHouseJob(current_week - 1) != null)
+		if ((student.isDayStudent() && !Main.main.getData().getBoolean("Settings.Day Students.House Jobs"))
+				|| student.getHouseJob(current_week - 1) != null)
 			return false;
 		for (int i = 1; i < Math.floor(inGrade / Main.main.totalJobSpots()) - 1; i++)
 			if (student.getHouseJob(current_week - i) != null && student.getHouseJob(current_week - i).getName().equals(getName()))

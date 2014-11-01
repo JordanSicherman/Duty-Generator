@@ -43,10 +43,44 @@ public class Main {
 		else
 			random = new Random();
 
+		delete(new File("Duty Schedule"));
+		delete(new File("Prefect Schedule"));
+		delete(new File("Student Specific"));
+
 		loadData();
 		generate();
 	}
 
+	/**
+	 * Delete a directory.
+	 * 
+	 * @param directory
+	 *            The directory to delete.
+	 */
+	private void delete(File directory) {
+		if (directory.exists()) {
+			File[] files = directory.listFiles();
+			if (null != files) {
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].isDirectory()) {
+						delete(files[i]);
+					} else {
+						files[i].delete();
+					}
+				}
+			}
+		}
+		// directory.delete();
+	}
+
+	/**
+	 * Save an internal resource.
+	 * 
+	 * @param path
+	 *            The path to the resource.
+	 * @param overwrite
+	 *            Whether or not to overwrite the file.
+	 */
 	private void saveResource(String path, boolean overwrite) {
 		FileOutputStream out = null;
 		try {

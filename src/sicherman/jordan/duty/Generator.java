@@ -21,7 +21,7 @@ public abstract class Generator {
 
 	// Formats for generation.
 	private static final SimpleDateFormat fileFormat = new SimpleDateFormat("MMM d");
-	private static final SimpleDateFormat prefectFormat = new SimpleDateFormat("EEE, MMM d");
+	private static final SimpleDateFormat prefectFormat = new SimpleDateFormat("EEE - MMM d");
 
 	// Acceptable weekday formats.
 	public static final String[] weekdays = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -67,7 +67,7 @@ public abstract class Generator {
 					writeToSpecificFile(student,
 							job.getName()
 									+ (job.getWorkers().size() > 1 ? " with " + listToStringExcluding(job.getWorkers(), student) : ""),
-							from);
+							fileFormat.format(from.getTime()));
 					buffer.append(student.getName());
 					buffer.append(", ");
 				}
@@ -162,8 +162,10 @@ public abstract class Generator {
 			// Store important data and write to the specific files.
 			for (Student student : prefects.keySet()) {
 				List<Student> onJob = fromMapWithValue(prefects, prefects.get(student));
-				writeToSpecificFile(student, prefectFormat.format(other.getTime()) + ": Prefect Duty"
-						+ (onJob.size() > 1 ? " with " + listToStringExcluding(onJob, student) : ""), from);
+				Calendar individualCalendar = (Calendar) from.clone();
+				individualCalendar.add(Calendar.DAY_OF_YEAR, prefects.get(student));
+				writeToSpecificFile(student, "Prefect Duty" + (onJob.size() > 1 ? " with " + listToStringExcluding(onJob, student) : ""),
+						prefectFormat.format(individualCalendar.getTime()));
 				other.set(Calendar.DAY_OF_YEAR, dOy + prefects.get(student));
 
 				// Write for later.
@@ -199,17 +201,17 @@ public abstract class Generator {
 	 *            The student.
 	 * @param entry
 	 *            The line to write to file.
-	 * @param calendar
-	 *            The calendar that will provide a file name.
+	 * @param format
+	 *            The format of the file name.
 	 */
-	private void writeToSpecificFile(Student student, String entry, Calendar calendar) {
+	private void writeToSpecificFile(Student student, String entry, String format) {
 		BufferedWriter writer = null;
 		try {
 			// Make files and folders.
 			File folder = new File("Student Specific" + File.separator + "Grade " + student.getGrade() + File.separator + student.getName());
 			folder.mkdirs();
 			File logFile = new File("Student Specific" + File.separator + "Grade " + student.getGrade() + File.separator
-					+ student.getName() + File.separator + fileFormat.format(calendar.getTime()) + ".txt");
+					+ student.getName() + File.separator + format + ".txt");
 
 			// Write.
 			writer = new BufferedWriter(new FileWriter(logFile));

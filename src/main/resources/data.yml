@@ -1,0 +1,35 @@
+Settings:
+  Day Students:
+    Exemptions:
+    - Monday
+    - Sunday
+    House Jobs: false
+  Generation:
+    Seed: -1
+    Weeks: 52
+
+Students:
+  John Doe:
+    Grade: 9
+    Day Student: true
+    Room Number: 5
+    Exemptions: []
+  Jane Doe:
+    Grade: 12
+    Day Student: false
+    Room Number: 17
+    Exemptions:
+    - Wednesday
+    - Thursday
+
+Jobs:
+  Some Job:
+    Capacity: 1
+    Grades:
+    - 9
+    - 10
+    - 11
+  Prefect:
+    Capacity: 1
+    Grades:
+    - 12
